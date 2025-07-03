@@ -12,17 +12,42 @@ router.get('/:postId', async (req, res)=> {
 
 
 router.get('/', async (req, res)=> {
-    const {keyword} = req.query;
-    if(!keyword)
-        res.json(await Post.find())
+    const keyword = req.query.keyword;
+    const page = Number(req.query.page);
+    const pageSize = Number(req.query.pageSize);
+
+    const skip = (page - 1) * pageSize;
+    if(!keyword){
+        const total = await Post.countDocuments();
+        const findPosts = await Post.find().skip(skip).limit(pageSize)
+        res.json({
+            data: findPosts,
+            total,
+            page,
+            pageSize
+        })
+    }
+
+    const total = await Post.countDocuments({
+        $or: [
+            {title: {$regex: `.*${keyword}.*`}},
+            {content: {$regex: `.*${keyword}.*`}}
+        ]
+    })
 
     const findPosts = await Post.find({
         $or: [
             {title: {$regex: `.*${keyword}.*`}},
             {content: {$regex: `.*${keyword}.*`}}
         ]
+    }).skip(skip).limit(pageSize)
+
+    res.json({
+        data: findPosts,
+        total,
+        page,
+        pageSize
     })
-    res.json(findPosts)
 
 })
 

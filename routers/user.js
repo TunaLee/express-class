@@ -4,21 +4,29 @@ import User from "../models/users.model.js";
 import passport from "../config/passport.js"
 import jwt from "jsonwebtoken"
 import nodemailer from "nodemailer"
+import upload from "../modules/upload.module.js";
 
 const router = Router();
 
-
-router.post("/signup", async (req, res)=> {
-    const {email, username, password} = req.body;
-
-    // const hashedPassword = await bcrypt.hash(password, 10)
-    const user = await User.create({
+router.post("/signup", upload.single('profileImage'), async (req, res) => {
+    try {
+      const { email, username, password } = req.body;
+      const profileImageUrl = req.file ? req.file.location : undefined;
+  
+  
+      const user = await User.create({
         username,
         email,
-        password
-    })
-    res.status(201).json(user)
-})
+        password, 
+        profileImageUrl
+      });
+  
+      res.status(201).json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: '회원가입 실패' });
+    }
+  });
 
 router.post("/login", passport.authenticate("local", {
     failureMessage: true,

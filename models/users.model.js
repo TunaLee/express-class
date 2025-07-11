@@ -24,6 +24,7 @@ const UserSchema = new Schema(
             enum: ["normal", "google"],
             default: "normal"
         },
+        profileImageUrl: String,
         socialId: String,
         posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}]
     }

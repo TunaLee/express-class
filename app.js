@@ -8,6 +8,7 @@ import MongStore from "connect-mongo"
 import passport from './config/passport.js';
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+import upload from './modules/upload.module.js';
 
 dotenv.config()
 
@@ -49,5 +50,6 @@ app.use('/auth', userRouter)
 app.use((err, req, res, next)=> {
     res.status(500).json({message: err.message})
 })
+
 
 export default app;

@@ -24,7 +24,7 @@ jobs:
 
       - name: Remove old app.zip
         run: rm -rf app.zip
-        
+
       - name: Archive project
         run: zip -r app.zip . -x "*.git*" "node_modules/*" ".github/*"
 
@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           source: "app.zip"
-          target: "~/app.zip"
+          target: "~"
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.0.3

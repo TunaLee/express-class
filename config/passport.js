@@ -50,7 +50,6 @@ const googleOption = {
 passport.use(
     "jwt",
     new JwtStrategy(jwtOption, async (user, done) => {
-        console.log('asdasd')
         const foundUser = await User.findById(user._id);
         if(!foundUser) 
             return done(null, false, {message: "User not found"})

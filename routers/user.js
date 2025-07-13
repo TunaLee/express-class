@@ -27,7 +27,6 @@ router.post("/signup", upload.single('profileImage'), async (req, res) => {
       res.status(500).json({ error: '회원가입 실패' });
     }
   });
-  
 
 router.post("/login", passport.authenticate("local", {
     failureMessage: true,
